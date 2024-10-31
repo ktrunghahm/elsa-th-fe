@@ -17,14 +17,20 @@ export function RootRoute() {
 
   if (userData) {
     return (
-      <Box padding={0} margin={0}>
+      <>
         <Box
+          position={'sticky'}
+          top={0}
           display={'flex'}
           justifyContent={'right'}
           component={'header'}
           alignItems={'center'}
           gap={2}
           bgcolor={colors.common.white}
+          height={40}
+          zIndex={99999}
+          paddingX={1}
+          margin={0}
         >
           <Typography variant="body2">{userData.user.email}</Typography>
           <LoadingButton loading={isPending} variant="outlined" onClick={() => mutateAsync()}>
@@ -32,7 +38,7 @@ export function RootRoute() {
           </LoadingButton>
         </Box>
         <Outlet />
-      </Box>
+      </>
     );
   }
 

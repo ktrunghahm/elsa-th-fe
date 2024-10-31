@@ -1,4 +1,4 @@
-import { Box, CircularProgress, Container, Typography } from '@mui/material';
+import { Box, CircularProgress, colors, Container, Typography } from '@mui/material';
 import { useParams } from 'react-router-dom';
 import { Question } from '../components/Question';
 import { useFetchQuizForUser } from '../services/quiz';
@@ -35,8 +35,21 @@ export function QuizPage() {
           <LeaderBoard quizName={quizData.quiz.name} />
         </Box>
         <Box paddingY={2} flex={1}>
+          <Box
+            display={'flex'}
+            gap={1}
+            position={'sticky'}
+            top={40}
+            bgcolor={colors.common.white}
+            paddingY={1}
+            zIndex={99999}
+          >
+            <Typography>Current score: {quizData.totalScore}</Typography>
+            <Typography>Answered questions: {Object.keys(quizData.answers).length}</Typography>
+            <Typography>Total questions: {quizData.quiz.content.questions.length}</Typography>
+          </Box>
           {quizData.quiz.content.questions.map((_, i) => (
-            <Box key={i} marginY={2} width={500} marginX={'auto'}>
+            <Box key={i} marginY={2} width={440} marginX={'auto'}>
               <Question questionIndex={i} quiz={quizData} />
             </Box>
           ))}
