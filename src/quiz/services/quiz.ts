@@ -2,6 +2,7 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { AxiosError } from 'axios';
 import { axiosInstance } from '../../common/axios';
 import { Quiz } from '../types';
+import { faker } from '@faker-js/faker';
 
 export const FETCH_LIST_QUIZZES_KEY = 'fetch-list-quizzes';
 export function useListQuizzes() {
@@ -35,6 +36,29 @@ export function useJoinQuiz() {
       const res = await axiosInstance.post(`/user/quiz/${quizId}/join`, {});
       queryClient.invalidateQueries({ queryKey: [FETCH_LIST_QUIZZES_KEY] });
       queryClient.invalidateQueries({ queryKey: [FETCH_QUIZ_FOR_USER, quizId] });
+      return res.data;
+    },
+  });
+}
+
+export function useDeleteQuiz() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: async (quizId: string) => {
+      const res = await axiosInstance.delete(`/admin/quiz/${quizId}`);
+      queryClient.invalidateQueries({ queryKey: [FETCH_LIST_QUIZZES_KEY] });
+      queryClient.invalidateQueries({ queryKey: [FETCH_QUIZ_FOR_USER, quizId] });
+      return res.data;
+    },
+  });
+}
+
+export function useGenerateQuiz() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: async () => {
+      const res = await axiosInstance.post(`/admin/quiz`, { name: `${faker.word.adjective()} quiz` });
+      queryClient.invalidateQueries({ queryKey: [FETCH_LIST_QUIZZES_KEY] });
       return res.data;
     },
   });

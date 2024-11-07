@@ -30,26 +30,27 @@ export function QuizPage() {
 
   return (
     <Container>
-      <Box display={'flex'} justifyContent={'stretch'}>
+      <Box minWidth={'930px'} display={'flex'} gap={2}>
         <Box paddingY={2} width={440}>
           <LeaderBoard quizName={quizData.quiz.name} />
         </Box>
-        <Box paddingY={2} flex={1}>
+        <Box paddingY={2} width={480}>
           <Box
             display={'flex'}
             gap={1}
-            position={'sticky'}
-            top={40}
-            bgcolor={colors.common.white}
+            justifyContent={'center'}
             paddingY={1}
-            zIndex={99999}
+            position={'sticky'}
+            top={64}
+            zIndex={10}
+            bgcolor={colors.common.white}
           >
             <Typography>Current score: {quizData.totalScore}</Typography>
             <Typography>Answered questions: {Object.keys(quizData.answers).length}</Typography>
             <Typography>Total questions: {quizData.quiz.content.questions.length}</Typography>
           </Box>
           {quizData.quiz.content.questions.map((_, i) => (
-            <Box key={i} marginY={2} width={440} marginX={'auto'}>
+            <Box key={i} marginY={2} marginX={'auto'}>
               <Question questionIndex={i} quiz={quizData} />
             </Box>
           ))}

@@ -6,14 +6,17 @@ import { useFetchUserInfo, useLogin } from '../services/authen';
 import { useState } from 'react';
 
 export function LoginPage() {
-  const { data: user } = useFetchUserInfo();
+  const { data } = useFetchUserInfo();
   const [searchParams] = useSearchParams();
   const { mutateAsync, isPending } = useLogin();
   const [loginError, setLoginError] = useState('');
 
   const formMethods = useForm({ defaultValues: { email: '', password: '' } });
 
-  if (user) {
+  if (data) {
+    if (data.role === 'admin') {
+      return <Navigate to={`${searchParams.get('from') || '/admin'}`} />;
+    }
     return <Navigate to={`${searchParams.get('from') || '/list-quizzes'}`} />;
   }
 

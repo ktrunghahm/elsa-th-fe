@@ -33,8 +33,8 @@ export function LeaderBoard({ quizName }: { quizName: string }) {
   }, [queryClient, quizId, socketRef]);
 
   return (
-    <Box position={'sticky'} top={40}>
-      <Box marginY={2}>
+    <Box position={'sticky'} top={64}>
+      <Box>
         <Typography variant="h6">
           Leader board for{' '}
           <Typography fontStyle={'italic'} fontWeight={600} variant="subtitle2" component={'span'}>

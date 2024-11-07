@@ -1,5 +1,25 @@
 import { useEffect, useRef } from 'react';
 import { io } from 'socket.io-client';
+import { create } from 'zustand';
+import { AuthenticationState, UserInfo } from './types';
+
+export const useAppStore = create<{
+  authentication: AuthenticationState;
+  authenticate: (v: AuthenticationState) => void;
+
+  user: UserInfo | null;
+  setUserInfo: (v: UserInfo) => void;
+}>((set) => ({
+  authentication: AuthenticationState.pending,
+  authenticate(v: AuthenticationState) {
+    set((state) => ({ ...state, authentication: v }));
+  },
+
+  user: null,
+  setUserInfo(v) {
+    set((state) => ({ ...state, user: v }));
+  },
+}));
 
 export function useConnectAndHoldSocket(url: string, path: string, query: Record<string, string>) {
   const socketRef = useRef(
