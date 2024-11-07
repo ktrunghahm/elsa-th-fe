@@ -9,6 +9,9 @@ export const useAppStore = create<{
 
   user: UserInfo | null;
   setUserInfo: (v: UserInfo) => void;
+
+  locale: string;
+  setLocale: (v: string) => void;
 }>((set) => ({
   authentication: AuthenticationState.pending,
   authenticate(v: AuthenticationState) {
@@ -18,6 +21,11 @@ export const useAppStore = create<{
   user: null,
   setUserInfo(v) {
     set((state) => ({ ...state, user: v }));
+  },
+
+  locale: 'en',
+  setLocale(v) {
+    set((state) => ({ ...state, locale: v }));
   },
 }));
 

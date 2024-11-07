@@ -1,8 +1,9 @@
 import { Box, CircularProgress, colors, Container, Typography } from '@mui/material';
+import { FormattedMessage } from 'react-intl';
 import { useParams } from 'react-router-dom';
+import { LeaderBoard } from '../components/LeaderBoard';
 import { Question } from '../components/Question';
 import { useFetchQuizForUser } from '../services/quiz';
-import { LeaderBoard } from '../components/LeaderBoard';
 
 export function QuizPage() {
   const { quizId } = useParams();
@@ -22,7 +23,9 @@ export function QuizPage() {
     return (
       <Container>
         <Box paddingY={2} marginX={'auto'} width={300}>
-          <Typography color="error">You have not joined this quiz</Typography>
+          <Typography color="error">
+            <FormattedMessage defaultMessage={'You have not joined this quiz'} />
+          </Typography>
         </Box>
       </Container>
     );
@@ -45,9 +48,21 @@ export function QuizPage() {
             zIndex={10}
             bgcolor={colors.common.white}
           >
-            <Typography>Current score: {quizData.totalScore}</Typography>
-            <Typography>Answered questions: {Object.keys(quizData.answers).length}</Typography>
-            <Typography>Total questions: {quizData.quiz.content.questions.length}</Typography>
+            <Typography>
+              <FormattedMessage defaultMessage={'Total score: {ts}'} values={{ ts: quizData.totalScore }} />
+            </Typography>
+            <Typography>
+              <FormattedMessage
+                defaultMessage={'Answered questions: {aq}'}
+                values={{ aq: Object.keys(quizData.answers).length }}
+              />
+            </Typography>
+            <Typography>
+              <FormattedMessage
+                defaultMessage={'Total questions: {tq}'}
+                values={{ tq: quizData.quiz.content.questions.length }}
+              />
+            </Typography>
           </Box>
           {quizData.quiz.content.questions.map((_, i) => (
             <Box key={i} marginY={2} marginX={'auto'}>

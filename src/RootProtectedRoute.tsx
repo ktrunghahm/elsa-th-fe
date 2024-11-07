@@ -4,18 +4,31 @@ import { useFetchUserInfo } from './authen/services/authen';
 import { HeaderBarLayout } from './common/components/HeaderBarLayout';
 import { useAppStore } from './common/hooks';
 import { AuthenticationState } from './common/types';
+import styled from '@emotion/styled';
 
 export function RootProtectedRoute() {
   const authenticationState = useAppStore((state) => state.authentication);
   useFetchUserInfo();
 
   if (authenticationState === AuthenticationState.pending) {
-    return <LinearProgress />;
+    return (
+      <MainContainer>
+        <LinearProgress />
+      </MainContainer>
+    );
   }
 
   if (authenticationState === AuthenticationState.yes) {
-    return <HeaderBarLayout main={<Outlet />} />;
+    return (
+      <MainContainer>
+        <HeaderBarLayout main={<Outlet />} />
+      </MainContainer>
+    );
   }
 
   return <Navigate to="/login" />;
 }
+
+const MainContainer = styled.div`
+  min-width: 1024px;
+`;

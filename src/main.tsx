@@ -6,6 +6,7 @@ import { createRoot } from 'react-dom/client';
 import { createBrowserRouter, Navigate, RouterProvider } from 'react-router-dom';
 import { AdminRoleProtectedRoute } from './authen/components/AdminRoleProtectedRoute';
 import { LoginPage } from './authen/pages/LoginPage';
+import { IntlProviderWrapper } from './common/components/IntlProviderWrapper';
 import { theme } from './common/theme';
 import './main.css';
 import { ListQuizzesPage } from './quiz/pages/ListQuizzesPage';
@@ -48,11 +49,13 @@ const router = createBrowserRouter([
 createRoot(document.getElementById('root')!).render(
   <QueryClientProvider client={queryClient}>
     <ThemeProvider theme={theme}>
-      <NotificationsProvider>
-        <ConfirmProvider>
-          <RouterProvider router={router} />
-        </ConfirmProvider>
-      </NotificationsProvider>
+      <IntlProviderWrapper>
+        <NotificationsProvider>
+          <ConfirmProvider>
+            <RouterProvider router={router} />
+          </ConfirmProvider>
+        </NotificationsProvider>
+      </IntlProviderWrapper>
     </ThemeProvider>
   </QueryClientProvider>,
 );

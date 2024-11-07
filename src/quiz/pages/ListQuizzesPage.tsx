@@ -4,11 +4,12 @@ import { DateTime } from 'luxon';
 import { useMemo } from 'react';
 import { RouterLinkWithConfirm } from '../../common/components/RouterLinkWithConfirm';
 import { useJoinQuiz, useListQuizzes } from '../services/quiz';
+import { FormattedMessage, useIntl } from 'react-intl';
 
 export function ListQuizzesPage() {
   const { data: availableQuizzes, isLoading } = useListQuizzes();
-
   const { mutateAsync, isPending: isJoining } = useJoinQuiz();
+  const intl = useIntl();
 
   const columns = useMemo(
     (): GridColDef[] => [
@@ -23,8 +24,11 @@ export function ListQuizzesPage() {
               <RouterLinkWithConfirm
                 to={`/quiz/${params.row.id}`}
                 requiresConfirm={!joinedAt}
-                confirmTitle="Confirm to join"
-                confirmDescription={`Are you sure you want to join quiz: ${params.value}`}
+                confirmTitle={intl.formatMessage({ defaultMessage: 'Confirm to join' })}
+                confirmDescription={intl.formatMessage(
+                  { defaultMessage: 'Are you sure you want to join: "{v}"' },
+                  { v: params.value },
+                )}
                 action={async () => {
                   await mutateAsync(params.row.id);
                 }}
@@ -45,10 +49,12 @@ export function ListQuizzesPage() {
             <Box>
               {joinedAt ? (
                 <Typography component={'span'} color={colors.green.A700}>
-                  Joined
+                  <FormattedMessage defaultMessage={'Joined'} />
                 </Typography>
               ) : (
-                <Typography component={'span'}>Not joined</Typography>
+                <Typography component={'span'}>
+                  <FormattedMessage defaultMessage={'Not joined'} />
+                </Typography>
               )}
             </Box>
           );
@@ -69,13 +75,15 @@ export function ListQuizzesPage() {
         },
       },
     ],
-    [mutateAsync],
+    [intl, mutateAsync],
   );
 
   return (
     <Container>
       <Box marginY={2}>
-        <Typography variant="h6">Available quizzes to join:</Typography>
+        <Typography variant="h6">
+          <FormattedMessage defaultMessage={'Available quizzes to join:'} />
+        </Typography>
       </Box>
       <DataGrid
         autosizeOnMount

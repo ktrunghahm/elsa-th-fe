@@ -2,6 +2,7 @@ import { Box, Button, Container, Typography } from '@mui/material';
 import { ReactNode } from 'react';
 import { useAppStore } from '../../common/hooks';
 import { useNavigate } from 'react-router-dom';
+import { FormattedMessage } from 'react-intl';
 
 interface Props {
   children: ReactNode;
@@ -15,10 +16,12 @@ export function AdminRoleProtectedRoute({ children }: Props) {
     return (
       <Container>
         <Box textAlign={'center'} marginY={4}>
-          <Typography color="warning">You don't have permission to access this page</Typography>
+          <Typography color="warning">
+            <FormattedMessage defaultMessage={"You don't have permission to access this page"} />
+          </Typography>
           <Box marginY={2}>
             <Button variant="contained" onClick={() => navigate('/', { replace: true })}>
-              Go back
+              <FormattedMessage defaultMessage={'Go back'} />
             </Button>
           </Box>
         </Box>

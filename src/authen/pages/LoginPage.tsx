@@ -4,12 +4,14 @@ import { Controller, useForm } from 'react-hook-form';
 import { Navigate, useSearchParams } from 'react-router-dom';
 import { useFetchUserInfo, useLogin } from '../services/authen';
 import { useState } from 'react';
+import { FormattedMessage, useIntl } from 'react-intl';
 
 export function LoginPage() {
   const { data } = useFetchUserInfo();
   const [searchParams] = useSearchParams();
   const { mutateAsync, isPending } = useLogin();
   const [loginError, setLoginError] = useState('');
+  const intl = useIntl();
 
   const formMethods = useForm({ defaultValues: { email: '', password: '' } });
 
@@ -37,7 +39,9 @@ export function LoginPage() {
           rowGap={2}
         >
           <Box display={'flex'} justifyContent={'center'}>
-            <Typography variant="subtitle1">Please login</Typography>
+            <Typography variant="subtitle1">
+              <FormattedMessage defaultMessage={'Please login'} />
+            </Typography>
           </Box>
           <Controller
             control={formMethods.control}
@@ -45,7 +49,7 @@ export function LoginPage() {
             rules={{ required: true }}
             render={({ field, fieldState }) => (
               <TextField
-                label="Email"
+                label={intl.formatMessage({ defaultMessage: 'Email' })}
                 fullWidth
                 error={fieldState.error ? true : false}
                 value={field.value}
@@ -59,7 +63,7 @@ export function LoginPage() {
             rules={{ required: true }}
             render={({ field, fieldState }) => (
               <TextField
-                label="Password"
+                label={intl.formatMessage({ defaultMessage: 'Password' })}
                 type="password"
                 fullWidth
                 error={fieldState.error ? true : false}
@@ -72,7 +76,7 @@ export function LoginPage() {
             {loginError}&nbsp;
           </FormHelperText>
           <LoadingButton variant="contained" fullWidth loading={isPending} type="submit">
-            Sign in
+            <FormattedMessage defaultMessage={'Login'} />
           </LoadingButton>
         </Box>
       </Box>

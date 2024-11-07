@@ -5,6 +5,7 @@ import { DateTime } from 'luxon';
 import { useConfirm } from 'material-ui-confirm';
 import { useMemo } from 'react';
 import { useDeleteQuiz, useGenerateQuiz, useListQuizzes } from '../services/quiz';
+import { FormattedMessage } from 'react-intl';
 
 export function ManageQuizzesPage() {
   const { data: availableQuizzes, isLoading } = useListQuizzes();
@@ -81,10 +82,10 @@ export function ManageQuizzesPage() {
       </Box>
       <Box marginY={2} display={'flex'} paddingY={1}>
         <Typography variant="h6" flex={1}>
-          Quizzes currently online:
+          <FormattedMessage defaultMessage={'Quizzes currently online:'} />
         </Typography>
         <Button variant="contained" onClick={() => generateQuiz()}>
-          Generate new quiz
+          <FormattedMessage defaultMessage={'Generate new quiz'} />
         </Button>
       </Box>
       <DataGrid

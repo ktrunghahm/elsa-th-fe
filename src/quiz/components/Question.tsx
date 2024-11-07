@@ -5,6 +5,7 @@ import { useMemo } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { Quiz } from '../types';
 import { useAnswerQuestion } from '../services/quiz';
+import { FormattedMessage, useIntl } from 'react-intl';
 
 export function Question({ questionIndex, quiz }: { quiz: Quiz; questionIndex: number }) {
   const question = useMemo(
@@ -19,6 +20,7 @@ export function Question({ questionIndex, quiz }: { quiz: Quiz; questionIndex: n
   });
   const { mutateAsync, isPending } = useAnswerQuestion();
   const notification = useNotifications();
+  const intl = useIntl();
 
   return (
     <Card>
@@ -33,9 +35,15 @@ export function Question({ questionIndex, quiz }: { quiz: Quiz; questionIndex: n
             quizId: quiz.quizId,
           });
           if (responseData.correct) {
-            notification.show('You have chosen wisely', { autoHideDuration: 3000, severity: 'success' });
+            notification.show(intl.formatMessage({ defaultMessage: 'You have chosen wisely' }), {
+              autoHideDuration: 3000,
+              severity: 'success',
+            });
           } else {
-            notification.show('You have chosen poorly', { autoHideDuration: 3000, severity: 'error' });
+            notification.show(intl.formatMessage({ defaultMessage: 'You have chosen poorly' }), {
+              autoHideDuration: 3000,
+              severity: 'error',
+            });
           }
         })}
       >
@@ -69,7 +77,7 @@ export function Question({ questionIndex, quiz }: { quiz: Quiz; questionIndex: n
             disabled={!formMethods.formState.isValid || answered !== undefined}
             variant="outlined"
           >
-            Answer
+            <FormattedMessage defaultMessage={'Answer'} />
           </LoadingButton>
         </Box>
       </Box>
