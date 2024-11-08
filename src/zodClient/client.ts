@@ -4,7 +4,7 @@ import { z } from 'zod';
 const AuthenReqDto = z.object({ email: z.string(), password: z.string() }).passthrough();
 const UserInfo = z.object({ email: z.string(), role: z.string() }).passthrough();
 const AuthenSuccessResponse = z
-  .object({ success: z.object({}).partial().passthrough().default(true), userInfo: UserInfo.optional() })
+  .object({ success: z.boolean().default(true), userInfo: UserInfo.optional() })
   .passthrough();
 const GetUserResponse = z.object({ user: UserInfo }).passthrough();
 const SimpleSuccessResponse = z.object({ success: z.boolean() }).passthrough();
