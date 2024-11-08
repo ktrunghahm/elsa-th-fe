@@ -60,11 +60,11 @@ export function QuizPage() {
             <Typography>
               <FormattedMessage
                 defaultMessage={'Total questions: {tq}'}
-                values={{ tq: quizData.quiz.content.questions.length }}
+                values={{ tq: quizData.quiz.content.length }}
               />
             </Typography>
           </Box>
-          {quizData.quiz.content.questions.map((_, i) => (
+          {quizData.quiz.content.map((_, i) => (
             <Box key={i} marginY={2} marginX={'auto'}>
               <Question questionIndex={i} quiz={quizData} />
             </Box>

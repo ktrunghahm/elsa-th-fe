@@ -3,8 +3,3 @@ export enum AuthenticationState {
   no = 'no',
   pending = 'pending',
 }
-
-export interface UserInfo {
-  user: { email: string };
-  role: string;
-}

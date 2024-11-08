@@ -45,7 +45,7 @@ export function LeaderBoard({ quizName }: { quizName: string }) {
           {'  '}
           <Typography component={'span'}>
             <FormattedMessage defaultMessage={'Online:'} />{' '}
-            {isLoadingOnlineCount ? <Skeleton variant="text" width={20} /> : onlineCountData.count}
+            {isLoadingOnlineCount ? <Skeleton variant="text" width={20} /> : onlineCountData?.count}
           </Typography>
         </Typography>
       </Box>

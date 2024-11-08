@@ -14,9 +14,8 @@ export function LoginPage() {
   const intl = useIntl();
 
   const formMethods = useForm({ defaultValues: { email: '', password: '' } });
-
   if (data) {
-    if (data.role === 'admin') {
+    if (data.user.role === 'admin') {
       return <Navigate to={`${searchParams.get('from') || '/admin'}`} />;
     }
     return <Navigate to={`${searchParams.get('from') || '/list-quizzes'}`} />;

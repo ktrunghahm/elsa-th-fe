@@ -1,7 +1,7 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { axiosInstance } from '../../common/axios';
+import { zodiosClient } from '../../common/axios';
 import { useAppStore } from '../../common/hooks';
-import { AuthenticationState, UserInfo } from '../../common/types';
+import { AuthenticationState } from '../../common/types';
 
 export const FETCH_USER_INFO_KEY = 'fetch-user-info';
 
@@ -12,14 +12,15 @@ export function useFetchUserInfo() {
   return useQuery({
     queryKey: [FETCH_USER_INFO_KEY],
     queryFn: async () => {
-      const res = await axiosInstance.get<UserInfo>('authen/user', { validateStatus: () => true });
-      if (res.status === 200) {
+      try {
+        const res = await zodiosClient.AuthenController_getCurrentUser();
         authenticate(AuthenticationState.yes);
-        const userInfo = res.data;
-        setUserInfo(userInfo);
-        return userInfo;
+        setUserInfo(res.user);
+        return res;
+      } catch (e) {
+        authenticate(AuthenticationState.no);
+        throw e;
       }
-      return null;
     },
     retry: false,
   });
@@ -31,21 +32,21 @@ export function useLogin() {
 
   return useMutation({
     mutationFn: async (data: { email: string; password: string }) => {
-      const res = await axiosInstance.post('/authen/authen-req', data, {
-        validateStatus() {
-          return true;
-        },
-      });
-      if (res.status === 200) {
-        if (res.data.success) {
-          queryClient.invalidateQueries({ queryKey: [FETCH_USER_INFO_KEY] });
-          return null;
+      try {
+        const res = await zodiosClient.AuthenController_authenReq(data);
+        if (res.success) {
+          authenticate(AuthenticationState.yes);
         } else {
+          authenticate(AuthenticationState.no);
           return 'Wrong email or password';
         }
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      } catch (e) {
+        return 'Wrong email or password';
       }
-      authenticate(AuthenticationState.yes);
-      return res.statusText;
+    },
+    onSuccess() {
+      queryClient.invalidateQueries({ queryKey: [FETCH_USER_INFO_KEY] });
     },
   });
 }
@@ -56,10 +57,12 @@ export function useLogout() {
 
   return useMutation({
     mutationFn: async () => {
-      const res = await axiosInstance.post('/authen/logout');
+      const res = await zodiosClient.AuthenController_logout(undefined);
+      return res;
+    },
+    onSuccess() {
       queryClient.clear();
       authenticate(AuthenticationState.no);
-      return res.statusText;
     },
   });
 }

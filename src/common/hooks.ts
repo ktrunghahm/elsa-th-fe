@@ -1,14 +1,15 @@
 import { useEffect, useRef } from 'react';
 import { io } from 'socket.io-client';
 import { create } from 'zustand';
-import { AuthenticationState, UserInfo } from './types';
+import { schemas } from '../zodClient/client';
+import { AuthenticationState } from './types';
 
 export const useAppStore = create<{
   authentication: AuthenticationState;
   authenticate: (v: AuthenticationState) => void;
 
-  user: UserInfo | null;
-  setUserInfo: (v: UserInfo) => void;
+  user: Zod.infer<typeof schemas.UserInfo> | null;
+  setUserInfo: (v: Zod.infer<typeof schemas.UserInfo>) => void;
 
   locale: string;
   setLocale: (v: string) => void;

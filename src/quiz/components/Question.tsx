@@ -3,15 +3,18 @@ import { Box, Card, colors, FormControlLabel, Radio, RadioGroup, Typography } fr
 import { useNotifications } from '@toolpad/core';
 import { useMemo } from 'react';
 import { Controller, useForm } from 'react-hook-form';
-import { Quiz } from '../types';
-import { useAnswerQuestion } from '../services/quiz';
 import { FormattedMessage, useIntl } from 'react-intl';
+import { schemas } from '../../zodClient/client';
+import { useAnswerQuestion } from '../services/quiz';
 
-export function Question({ questionIndex, quiz }: { quiz: Quiz; questionIndex: number }) {
-  const question = useMemo(
-    () => quiz.quiz.content.questions[questionIndex],
-    [questionIndex, quiz.quiz.content.questions],
-  );
+export function Question({
+  questionIndex,
+  quiz,
+}: {
+  quiz: Zod.infer<typeof schemas.QuizForUser>;
+  questionIndex: number;
+}) {
+  const question = useMemo(() => quiz.quiz.content[questionIndex], [questionIndex, quiz.quiz.content]);
   const answered = useMemo(() => quiz.answers[questionIndex], [questionIndex, quiz.answers]);
   const answeredCorrectly = useMemo(() => question.options[answered]?.answer, [answered, question.options]);
 
@@ -31,7 +34,7 @@ export function Question({ questionIndex, quiz }: { quiz: Quiz; questionIndex: n
         component={'form'}
         onSubmit={formMethods.handleSubmit(async (data) => {
           const responseData = await mutateAsync({
-            data: { questionIndex: data.questionIndex, selectedAnswerIndex: data.selectedAnswerIndex! },
+            data: { questionIndex: data.questionIndex, selectedAnswerIndex: Number(data.selectedAnswerIndex) },
             quizId: quiz.quizId,
           });
           if (responseData.correct) {
